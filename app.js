@@ -11,6 +11,11 @@ weatherApp.config(function($routeProvider) {
             templateUrl: 'pages/forecast.html',
             controller: 'forecastController'
         })
+
+        .when('/forecast/:days', {
+            templateUrl: 'pages/forecast.html',
+            controller: 'forecastController'
+        })
 })
 
 //SERVICES
@@ -30,7 +35,7 @@ weatherApp.controller('homeController', ['$scope', '$resource', 'cityService', f
     
 }])
 
-weatherApp.controller('forecastController', ['$scope', '$resource', 'cityService', function($scope, $resource,cityService) {
+weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams','cityService', function($scope, $resource, $routeParams, cityService) {
 
     $scope.city = cityService.city    
 
@@ -38,5 +43,13 @@ weatherApp.controller('forecastController', ['$scope', '$resource', 'cityService
 
     $scope.weatherResult = $scope.weatherAPI.get({ q: $scope.city})
     
+    $scope.convertToFahrenheit = function(degK) {
+        return Math.round((1.8 * (degK - 273)) + 32 );
+    };
+
+    $scope.convertToDate = function( dt ) {
+        return new Date(dt * 1000)
+    };
+
     console.log($scope.weatherResult)
 }]) 
